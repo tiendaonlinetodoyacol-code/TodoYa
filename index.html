@@ -210,6 +210,41 @@ footer{padding:56px 24px 32px; background:var(--ink); color:#fff;}
 .checkout-divider{display:flex; align-items:center; gap:10px; margin:2px 0; color:var(--ink-soft); font-size:0.74rem;}
 .checkout-divider::before, .checkout-divider::after{content:''; flex:1; height:1px; background:var(--line);}
 
+/* ---------- Shipping modal ---------- */
+.ship-modal{
+  position:fixed; top:50%; left:50%; transform:translate(-50%,-48%); z-index:96; width:min(520px, 92vw);
+  max-height:88vh; background:#fff; border-radius:20px; box-shadow:0 30px 60px -20px rgba(27,37,40,0.4);
+  opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease;
+}
+.ship-modal.open{opacity:1; pointer-events:auto; transform:translate(-50%,-50%);}
+.ship-modal-inner{max-height:88vh; overflow-y:auto; padding:24px 26px 28px;}
+.ship-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;}
+.ship-head h3{font-size:1.25rem;}
+.ship-form{display:flex; flex-direction:column; gap:14px;}
+.ship-row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.ship-form label{display:flex; flex-direction:column; gap:6px; font-size:0.82rem; font-weight:600; color:var(--ink-soft);}
+.ship-full{display:flex; flex-direction:column; gap:6px; font-size:0.82rem; font-weight:600; color:var(--ink-soft);}
+.ship-form input, .ship-form select{
+  border:1.5px solid var(--line); border-radius:10px; padding:11px 12px; font-size:0.92rem; font-family:'Inter',sans-serif;
+  color:var(--ink); background:#fff;
+}
+.ship-form input:focus, .ship-form select:focus{border-color:var(--ink); outline:none;}
+.calc-btn{
+  margin-top:6px; width:100%; background:var(--ink); color:#fff; padding:14px; border-radius:12px; font-weight:700; font-size:0.96rem;
+}
+.calc-btn:hover{filter:brightness(1.15);}
+.ship-summary{margin-top:18px; padding-top:16px; border-top:1px solid var(--line);}
+.summary-row{display:flex; justify-content:space-between; align-items:center; font-size:0.92rem; color:var(--ink-soft); margin-bottom:10px;}
+.summary-total{font-size:1.1rem; color:var(--ink); font-weight:700; margin-top:4px; padding-top:10px; border-top:1px dashed var(--line);}
+.summary-total strong{font-size:1.3rem;}
+.ship-note{font-size:0.78rem; color:var(--ink-soft); margin-bottom:16px;}
+.edit-address-btn{
+  width:100%; background:transparent; color:var(--ink-soft); padding:8px; font-size:0.82rem; text-decoration:underline; margin-top:10px;
+}
+@media(max-width:560px){
+  .ship-row{grid-template-columns:1fr;}
+}
+
 @media(max-width:860px){
   .hero-inner{grid-template-columns:1fr;}
   .shelf{height:280px; margin-top:10px;}
@@ -315,6 +350,51 @@ footer{padding:56px 24px 32px; background:var(--ink); color:#fff;}
   <div class="drawer-body" id="cartBody"></div>
   <div class="drawer-footer" id="cartFooter"></div>
 </aside>
+
+<div class="overlay" id="shipOverlay"></div>
+<div class="ship-modal" id="shipModal" role="dialog" aria-label="Datos de envío" aria-modal="true">
+  <div class="ship-modal-inner">
+    <div class="ship-head">
+      <h3>Datos de envío</h3>
+      <button class="close-btn" id="closeShipBtn" aria-label="Cerrar">✕</button>
+    </div>
+
+    <form id="shipForm" class="ship-form">
+      <div class="ship-row">
+        <label>Nombre completo *<input type="text" id="shipNombre" required></label>
+        <label>Teléfono / WhatsApp *<input type="tel" id="shipTelefono" required placeholder="3001234567"></label>
+      </div>
+      <label class="ship-full">Correo electrónico<input type="email" id="shipEmail" placeholder="tucorreo@ejemplo.com"></label>
+      <div class="ship-row">
+        <label>Departamento *
+          <select id="shipDepartamento" required></select>
+        </label>
+        <label>Ciudad / Municipio *<input type="text" id="shipCiudad" required placeholder="Ej: Pereira"></label>
+      </div>
+      <label class="ship-full">Dirección *<input type="text" id="shipDireccion" required placeholder="Calle, carrera, número"></label>
+      <div class="ship-row">
+        <label>Barrio<input type="text" id="shipBarrio"></label>
+        <label>Indicaciones adicionales<input type="text" id="shipIndicaciones" placeholder="Apto, torre, punto de referencia…"></label>
+      </div>
+
+      <button type="submit" class="calc-btn">📦 Calcular envío</button>
+    </form>
+
+    <div class="ship-summary" id="shipSummary" style="display:none">
+      <div class="summary-row"><span>Subtotal productos</span><strong class="price" id="sumSubtotal"></strong></div>
+      <div class="summary-row"><span id="sumEnvioLabel">Costo de envío</span><strong class="price" id="sumEnvio"></strong></div>
+      <div class="summary-row summary-total"><span>Total a pagar</span><strong class="price" id="sumTotal"></strong></div>
+      <p class="ship-note" id="shipZoneNote"></p>
+
+      <div class="checkout-options">
+        <button class="wompi-btn" id="wompiBtnModal" onclick="confirmarConWompi()">💳 Pagar en línea (Wompi)</button>
+        <div class="checkout-divider">o si prefieres</div>
+        <button class="checkout-btn" onclick="confirmarConWhatsapp()">💬 Confirmar por WhatsApp</button>
+      </div>
+      <button type="button" class="edit-address-btn" id="editAddressBtn">← Editar dirección</button>
+    </div>
+  </div>
+</div>
 
 <script>
 /* ================= DATA ================= */
@@ -487,27 +567,21 @@ function renderCart(){
 
   const total = cartTotal();
   footer.innerHTML = `
-    <div class="total-row"><span>Total</span><strong class="price">${fmt(total)}</strong></div>
-    <div class="checkout-options">
-      <button class="wompi-btn" id="wompiBtn" onclick="checkoutWompi()">💳 Pagar en línea (Wompi)</button>
-      <div class="checkout-divider">o si prefieres</div>
-      <button class="checkout-btn" onclick="checkoutWhatsapp()">💬 Confirmar por WhatsApp</button>
-    </div>
-    <p class="checkout-note">El monto de tu pago queda fijo automáticamente en ${fmt(total)}.</p>`;
+    <div class="total-row"><span>Subtotal</span><strong class="price">${fmt(total)}</strong></div>
+    <button class="wompi-btn" onclick="openShippingModal()">📦 Continuar con el pedido</button>
+    <p class="checkout-note">El envío se calcula en el siguiente paso, según tu ciudad.</p>`;
 }
 
-async function checkoutWompi(){
-  if(Object.keys(cart).length === 0) return;
-  const btn = document.getElementById('wompiBtn');
-  const total = cartTotal();
-  const reference = `TODOYA-${Date.now()}`;
+async function checkoutWompi(shippingCost, shippingData, reference){
+  const btn = document.getElementById('wompiBtnModal');
+  const total = cartTotal() + shippingCost;
   btn.disabled = true;
   btn.textContent = 'Generando enlace de pago…';
   try{
     const res = await fetch('/.netlify/functions/crear-pago', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ amount: total, reference })
+      body: JSON.stringify({ amount: total, reference, shipping: shippingData })
     });
     const data = await res.json();
     if(!res.ok || !data.url){
@@ -522,7 +596,7 @@ async function checkoutWompi(){
   }
 }
 
-function checkoutWhatsapp(){
+function checkoutWhatsapp(shippingCost, shippingData){
   const items = Object.entries(cart);
   if(items.length === 0) return;
   let msg = "Hola, quiero hacer este pedido:%0A%0A";
@@ -530,7 +604,13 @@ function checkoutWhatsapp(){
     const p = prodOf(id);
     msg += `• ${p.name} x${qty} — ${fmt(p.price * qty)}%0A`;
   });
-  msg += `%0ATotal: ${fmt(cartTotal())}`;
+  msg += `%0ASubtotal: ${fmt(cartTotal())}`;
+  msg += `%0AEnvío (${shippingData.zonaNombre}): ${fmt(shippingCost)}`;
+  msg += `%0ATotal: ${fmt(cartTotal() + shippingCost)}`;
+  msg += `%0A%0A📍 Datos de envío:%0A${shippingData.nombre} — ${shippingData.telefono}`;
+  msg += `%0A${shippingData.direccion}${shippingData.barrio ? ', ' + shippingData.barrio : ''}`;
+  msg += `%0A${shippingData.ciudad}, ${shippingData.departamento}`;
+  if(shippingData.indicaciones) msg += `%0AIndicaciones: ${shippingData.indicaciones}`;
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
 }
 
@@ -563,10 +643,156 @@ window.addEventListener('scroll', () => {
   });
 }, {passive:true});
 
+/* ================= ENVÍO — DEPARTAMENTOS DE COLOMBIA POR ZONA =================
+   Tarifas de referencia — AJÚSTALAS con los valores reales que veas en tu panel
+   de Dropi para cada transportadora. Esto NO es una cotización en vivo. */
+const ZONA_1 = { nombre: 'Zona 1 — principales', costo: 12000 };
+const ZONA_2 = { nombre: 'Zona 2 — intermedias', costo: 16000 };
+const ZONA_3 = { nombre: 'Zona 3 — apartadas', costo: 22000 };
+
+const DEPARTAMENTOS = [
+  { nombre: 'Bogotá D.C.', zona: ZONA_1 },
+  { nombre: 'Antioquia', zona: ZONA_1 },
+  { nombre: 'Valle del Cauca', zona: ZONA_1 },
+  { nombre: 'Atlántico', zona: ZONA_1 },
+  { nombre: 'Cundinamarca', zona: ZONA_1 },
+  { nombre: 'Santander', zona: ZONA_1 },
+  { nombre: 'Risaralda', zona: ZONA_2 },
+  { nombre: 'Caldas', zona: ZONA_2 },
+  { nombre: 'Quindío', zona: ZONA_2 },
+  { nombre: 'Bolívar', zona: ZONA_2 },
+  { nombre: 'Tolima', zona: ZONA_2 },
+  { nombre: 'Boyacá', zona: ZONA_2 },
+  { nombre: 'Norte de Santander', zona: ZONA_2 },
+  { nombre: 'Huila', zona: ZONA_2 },
+  { nombre: 'Meta', zona: ZONA_2 },
+  { nombre: 'Cesar', zona: ZONA_2 },
+  { nombre: 'Córdoba', zona: ZONA_2 },
+  { nombre: 'Magdalena', zona: ZONA_2 },
+  { nombre: 'Sucre', zona: ZONA_2 },
+  { nombre: 'Nariño', zona: ZONA_2 },
+  { nombre: 'Cauca', zona: ZONA_2 },
+  { nombre: 'La Guajira', zona: ZONA_3 },
+  { nombre: 'Chocó', zona: ZONA_3 },
+  { nombre: 'Casanare', zona: ZONA_3 },
+  { nombre: 'Arauca', zona: ZONA_3 },
+  { nombre: 'Putumayo', zona: ZONA_3 },
+  { nombre: 'Caquetá', zona: ZONA_3 },
+  { nombre: 'Amazonas', zona: ZONA_3 },
+  { nombre: 'Guainía', zona: ZONA_3 },
+  { nombre: 'Guaviare', zona: ZONA_3 },
+  { nombre: 'Vaupés', zona: ZONA_3 },
+  { nombre: 'Vichada', zona: ZONA_3 },
+  { nombre: 'San Andrés y Providencia', zona: ZONA_3 },
+];
+
+let ultimoEnvio = { costo: 0, data: null }; // se llena al calcular
+
+function renderDepartamentos(){
+  const sel = document.getElementById('shipDepartamento');
+  sel.innerHTML = '<option value="" disabled selected>Selecciona tu departamento</option>' +
+    DEPARTAMENTOS.map(d => `<option value="${d.nombre}">${d.nombre}</option>`).join('');
+}
+
+function openShippingModal(){
+  if(Object.keys(cart).length === 0) return;
+  document.getElementById('shipModal').classList.add('open');
+  document.getElementById('shipOverlay').classList.add('open');
+  document.getElementById('shipSummary').style.display = 'none';
+  document.getElementById('shipForm').style.display = 'flex';
+}
+function closeShippingModal(){
+  document.getElementById('shipModal').classList.remove('open');
+  document.getElementById('shipOverlay').classList.remove('open');
+}
+document.getElementById('closeShipBtn').addEventListener('click', closeShippingModal);
+document.getElementById('shipOverlay').addEventListener('click', closeShippingModal);
+document.getElementById('editAddressBtn').addEventListener('click', () => {
+  document.getElementById('shipSummary').style.display = 'none';
+  document.getElementById('shipForm').style.display = 'flex';
+});
+
+document.getElementById('shipForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const departamentoNombre = document.getElementById('shipDepartamento').value;
+  const dep = DEPARTAMENTOS.find(d => d.nombre === departamentoNombre);
+  if(!dep){ alert('Selecciona un departamento.'); return; }
+
+  const shippingData = {
+    nombre: document.getElementById('shipNombre').value.trim(),
+    telefono: document.getElementById('shipTelefono').value.trim(),
+    email: document.getElementById('shipEmail').value.trim(),
+    departamento: departamentoNombre,
+    ciudad: document.getElementById('shipCiudad').value.trim(),
+    direccion: document.getElementById('shipDireccion').value.trim(),
+    barrio: document.getElementById('shipBarrio').value.trim(),
+    indicaciones: document.getElementById('shipIndicaciones').value.trim(),
+    zonaNombre: dep.zona.nombre,
+  };
+
+  const envioCosto = dep.zona.costo;
+  ultimoEnvio = { costo: envioCosto, data: shippingData };
+
+  const subtotal = cartTotal();
+  document.getElementById('sumSubtotal').textContent = fmt(subtotal);
+  document.getElementById('sumEnvioLabel').textContent = `Envío (${dep.zona.nombre})`;
+  document.getElementById('sumEnvio').textContent = fmt(envioCosto);
+  document.getElementById('sumTotal').textContent = fmt(subtotal + envioCosto);
+  document.getElementById('shipZoneNote').textContent =
+    'Esta es una tarifa de referencia. El valor final del envío puede ajustarse según la transportadora asignada por Dropi.';
+
+  document.getElementById('shipForm').style.display = 'none';
+  document.getElementById('shipSummary').style.display = 'block';
+});
+
+function armarProductosTexto(){
+  return Object.entries(cart).map(([id, qty]) => {
+    const p = prodOf(id);
+    return `${p.name} x${qty} (${fmt(p.price * qty)})`;
+  }).join(' | ');
+}
+
+function guardarPedidoEnSheet(metodo){
+  const data = ultimoEnvio.data;
+  const payload = {
+    metodo,
+    reference: `TODOYA-${Date.now()}`,
+    nombre: data.nombre,
+    telefono: data.telefono,
+    email: data.email,
+    direccion: data.direccion,
+    barrio: data.barrio,
+    ciudad: data.ciudad,
+    departamento: data.departamento,
+    indicaciones: data.indicaciones,
+    productos: armarProductosTexto(),
+    subtotal: cartTotal(),
+    envio: ultimoEnvio.costo,
+    total: cartTotal() + ultimoEnvio.costo,
+  };
+  // "Fire and forget": no bloqueamos el pago si el registro tarda o falla.
+  fetch('/.netlify/functions/guardar-pedido', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  }).catch(() => {});
+  return payload.reference;
+}
+
+function confirmarConWompi(){
+  const reference = guardarPedidoEnSheet('Wompi');
+  checkoutWompi(ultimoEnvio.costo, ultimoEnvio.data, reference);
+}
+function confirmarConWhatsapp(){
+  guardarPedidoEnSheet('WhatsApp');
+  checkoutWhatsapp(ultimoEnvio.costo, ultimoEnvio.data);
+}
+
 /* ================= INIT ================= */
 renderAisleStrip();
 renderCategories();
 renderCart();
+renderDepartamentos();
 </script>
 </body>
 </html>
