@@ -37,25 +37,27 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 /* ---------- Header ---------- */
 .site-header{
-  position:sticky; top:0; z-index:50; background:rgba(255,255,255,0.96);
-  backdrop-filter:blur(8px); border-bottom:2px solid var(--black);
+  position:sticky; top:0; z-index:50;
+  background:linear-gradient(120deg, #0A0A0A 0%, #1C1A16 45%, #2b2419 75%, #1C1A16 100%);
+  border-bottom:2px solid var(--gold);
+  box-shadow:0 4px 18px -8px rgba(0,0,0,0.55);
 }
 .header-row{display:flex; align-items:center; gap:20px; padding:12px 24px; max-width:1180px; margin:0 auto;}
 .logo-mark{display:flex; align-items:center; gap:14px; white-space:nowrap;}
-.logo-mark img{height:80px; width:80px; border-radius:50%;}
-.logo-mark .logo-text{font-size:2rem; font-weight:700; letter-spacing:0.02em; display:flex; align-items:center; line-height:1;}
+.logo-mark img{height:80px; width:80px; border-radius:50%; border:2px solid var(--gold);}
+.logo-mark .logo-text{font-size:2rem; font-weight:700; letter-spacing:0.02em; display:flex; align-items:center; line-height:1; color:#fff;}
 .logo-mark .logo-text span{
   background:linear-gradient(115deg, var(--gold) 25%, var(--gold-bright) 50%, var(--gold) 75%);
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
 .search-box{
-  flex:1; display:flex; align-items:center; background:#fff; border:1.5px solid var(--line);
+  flex:1; display:flex; align-items:center; background:rgba(255,255,255,0.06); border:1.5px solid rgba(227,167,18,0.4);
   border-radius:4px; padding:8px 16px; gap:8px; max-width:420px;
 }
 .search-ic{display:flex; flex:none;}
-.search-ic svg{width:16px; height:16px; color:var(--ink-soft);}
-.search-box input{border:none; outline:none; width:100%; font-size:0.95rem; background:transparent; color:var(--ink); font-family:inherit;}
-.search-box input::placeholder{color:var(--ink-soft);}
+.search-ic svg{width:16px; height:16px; color:var(--gold-bright);}
+.search-box input{border:none; outline:none; width:100%; font-size:0.95rem; background:transparent; color:#fff; font-family:inherit;}
+.search-box input::placeholder{color:#C7C1AE;}
 .header-actions{display:flex; align-items:center; gap:12px; margin-left:auto;}
 .cart-btn{
   position:relative; display:flex; align-items:center; gap:10px; background:var(--gold); color:var(--black);
@@ -99,13 +101,20 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .hero-ctas{display:flex; gap:14px; flex-wrap:wrap;}
 .btn-primary{
   background:var(--gold); color:var(--black); padding:14px 28px; border-radius:4px; font-weight:700; font-size:0.98rem;
-  transition:background .15s ease;
+  border:1.5px solid var(--gold-bright); box-shadow:0 6px 18px -6px rgba(227,167,18,0.55);
+  transition:background .15s ease, transform .15s ease;
 }
-.btn-primary:hover{background:var(--gold-bright);}
+.btn-primary:hover{background:var(--gold-bright); transform:translateY(-1px);}
 .btn-ghost{
   background:transparent; color:#fff; padding:14px 28px; border-radius:4px; font-weight:700; font-size:0.98rem;
   border:1.5px solid rgba(255,255,255,0.4);
 }
+.btn-whatsapp{
+  display:inline-flex; align-items:center; gap:10px; background:#25D366; color:#0B2C1A; padding:14px 28px;
+  border-radius:4px; font-weight:700; font-size:0.98rem; transition:filter .15s ease, transform .15s ease;
+}
+.btn-whatsapp svg{width:20px; height:20px; flex:none;}
+.btn-whatsapp:hover{filter:brightness(0.96); transform:translateY(-1px);}
 .hero-stats{display:flex; gap:32px; margin-top:36px;}
 .hero-stats div strong{display:block; font-size:1.4rem; color:var(--gold-bright);}
 .hero-stats div span{font-size:0.8rem; color:#B8B2A0;}
@@ -170,6 +179,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 .add-btn:hover{background:var(--gold-bright);}
 .no-results{display:none; color:var(--ink-soft); font-size:0.95rem; padding:12px 0;}
+.ver-mas-btn{
+  margin-top:18px; background:transparent; border:1.5px solid var(--gold); color:var(--ink);
+  padding:11px 24px; border-radius:4px; font-weight:700; font-size:0.85rem; letter-spacing:0.02em;
+  display:inline-flex; align-items:center; gap:6px; transition:background .15s ease;
+}
+.ver-mas-btn:hover{background:var(--gold-bg);}
 .offer-badge{
   position:absolute; top:12px; left:12px; z-index:2; background:var(--black); color:var(--gold-bright);
   font-size:0.7rem; font-weight:700; padding:4px 10px; border-radius:3px; letter-spacing:0.03em; text-transform:uppercase;
@@ -187,6 +202,39 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .trust-item .ic{display:flex; align-items:center; justify-content:center; width:34px; height:34px; flex:none; color:var(--gold);}
 .trust-item .ic svg{width:26px; height:26px;}
 .trust-item strong{display:block; color:var(--ink); font-size:0.95rem;}
+
+/* ---------- Reviews section ---------- */
+.reviews-section{padding:56px 24px; background:var(--black); border-bottom:1px solid rgba(232,195,73,0.2);}
+.reviews-head{text-align:center; margin-bottom:36px;}
+.reviews-head .price-tag{margin-bottom:0;}
+.reviews-summary{display:flex; align-items:center; justify-content:center; gap:14px; margin-top:16px; flex-wrap:wrap;}
+.reviews-score{font-size:2.4rem; font-weight:700; color:var(--gold-bright); line-height:1;}
+.reviews-stars-row{display:flex; flex-direction:column; align-items:flex-start; gap:4px;}
+.reviews-stars{display:flex; gap:3px;}
+.reviews-stars svg{width:18px; height:18px; color:var(--gold-bright);}
+.reviews-count{font-size:0.85rem; color:#B8B2A0;}
+.reviews-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:18px; max-width:1180px; margin:0 auto;}
+.review-card{
+  background:var(--black-soft); border:1px solid rgba(232,195,73,0.18); border-radius:6px; padding:20px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.review-top{display:flex; align-items:center; gap:12px;}
+.review-avatar{
+  width:42px; height:42px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg, var(--gold), var(--gold-bright)); color:var(--black); font-weight:700; font-size:1rem;
+}
+.review-who{min-width:0;}
+.review-name{font-weight:700; font-size:0.92rem; color:#fff;}
+.review-city{font-size:0.76rem; color:#B8B2A0;}
+.review-stars{display:flex; gap:2px;}
+.review-stars svg{width:14px; height:14px; color:var(--gold-bright);}
+.review-stars svg.dim{color:#4A4436;}
+.review-text{font-size:0.88rem; color:#D8D2C0; line-height:1.55;}
+.review-verified{
+  display:inline-flex; align-items:center; gap:5px; font-size:0.72rem; color:var(--gold-bright);
+  font-weight:700; text-transform:uppercase; letter-spacing:0.03em; margin-top:auto;
+}
+.review-verified svg{width:12px; height:12px;}
 
 /* ---------- Footer ---------- */
 footer{padding:56px 24px 32px; background:var(--black); color:#fff;}
@@ -329,7 +377,7 @@ footer{padding:56px 24px 32px; background:var(--black); color:#fff;}
       <p>Cascos, luces, accesorios, herramientas e indumentaria para motociclistas — directo desde el proveedor hasta tu puerta, con la calidad que tu moto se merece.</p>
       <div class="hero-ctas">
         <a href="#cascos" class="btn-primary">Ver catálogo</a>
-        <a href="#footer-contacto" class="btn-ghost">Hablar por WhatsApp</a>
+        <a class="btn-whatsapp" id="heroWaLink" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5c.1-.1.2-.3.2-.4.1-.2 0-.3 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.2-.1-.2-.3-.2-.6-.4Z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>Hablar por WhatsApp</a>
       </div>
       <div class="hero-stats">
         <div><strong>+150</strong><span>accesorios para moto</span></div>
@@ -356,6 +404,8 @@ footer{padding:56px 24px 32px; background:var(--black); color:#fff;}
     <div class="trust-item"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="2.5"/><circle cx="18.5" cy="17.5" r="2.5"/><path d="M5.5 17.5H9l2-5h4l2.5 3h2.5"/><path d="M9 8h3l2 4"/><path d="M9 8 7 6H4"/></svg></span><div><strong>Todo para tu moto</strong>en un solo lugar</div></div>
   </div>
 </section>
+
+<div id="reviewsRoot"></div>
 
 <footer id="footer-contacto">
   <div class="footer-inner">
@@ -450,6 +500,12 @@ const ICONS = {
   star: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6.1 6.6.7-4.9 4.5 1.3 6.6L12 17.9l-5.9 3.5 1.3-6.6-4.9-4.5 6.6-.7L12 2.5Z"/></svg>`,
   percent: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19 19 5"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/></svg>`,
   cart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 12.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9.5" cy="20.5" r="1.2"/><circle cx="17" cy="20.5" r="1.2"/></svg>`,
+  check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`,
+  phone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.36 2.3.56 3.5.56a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.7 21 3 13.3 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.2.2 2.4.56 3.5a1 1 0 0 1-.25 1l-2.21 2.3Z"/></svg>`,
+  chat: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.6 8.6 0 0 1-3.7-.9L3 20l1.1-5.3a8.4 8.4 0 0 1-.6-3.2 8.4 8.4 0 0 1 8.9-8.5c4.6.2 8.4 4 8.6 8.5Z"/></svg>`,
+  truck2: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h11v9H2z"/><path d="M13 10h4l3 3v3h-7z"/><circle cx="6" cy="18.5" r="1.6"/><circle cx="17.5" cy="18.5" r="1.6"/></svg>`,
+  shield: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg>`,
+  mail: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>`,
 };
 
 /* ================= DATA ================= */
@@ -501,6 +557,24 @@ const PRODUCTS = [
   {id:'i6', cat:'indumentaria', name:'Cuello térmico multifuncional', price:19900},
 ];
 
+// Reseñas de ejemplo (nombres y comentarios inventados) — reemplázalas cuando tengas reseñas reales de clientes.
+const REVIEWS = [
+  {name:'Juan Camilo Restrepo', city:'Pereira, Risaralda', rating:5, text:'Pedí el casco integral y llegó en dos días, súper bien empacado. La calidad se siente mejor de lo que esperaba por el precio.'},
+  {name:'Laura Gómez', city:'Medellín, Antioquia', rating:5, text:'El kit de luces LED le cambió la cara a mi moto. Fácil de instalar y el brillo es excelente para andar de noche.'},
+  {name:'Andrés Felipe Torres', city:'Bogotá D.C.', rating:4, text:'Buen servicio y buenos precios. El baúl trasero es resistente, solo tardó un poco más de lo esperado en llegar.'},
+  {name:'Mariana Castaño', city:'Cali, Valle del Cauca', rating:5, text:'Compré la chaqueta impermeable para la temporada de lluvias y funciona de maravilla. Se ve elegante y es cómoda.'},
+  {name:'Carlos Eduardo Pineda', city:'Manizales, Caldas', rating:5, text:'Excelente atención por WhatsApp, me ayudaron a elegir el casco correcto según mi talla. Muy recomendados.'},
+  {name:'Diana Marcela Ruiz', city:'Armenia, Quindío', rating:4, text:'El intercomunicador Bluetooth funciona muy bien con mi copiloto. El empaque llegó un poco golpeado pero el producto estaba intacto.'},
+  {name:'Santiago Herrera', city:'Barranquilla, Atlántico', rating:5, text:'Ya es mi segunda compra. Esta vez pedí el kit de herramientas y trae absolutamente todo lo que necesito para el mantenimiento básico.'},
+  {name:'Valentina Ospina', city:'Pereira, Risaralda', rating:3, text:'El producto es bueno, pero el envío tardó más de lo que decía la página. Aun así, la atención al reclamar fue amable y resolvieron rápido.'},
+  {name:'Jorge Iván Salazar', city:'Bucaramanga, Santander', rating:5, text:'Las alforjas laterales son de excelente material, resistieron un viaje largo bajo lluvia sin filtrar agua. Muy contento con la compra.'},
+  {name:'Camila Andrea Vélez', city:'Pereira, Risaralda', rating:4, text:'Buena variedad de productos y precios justos. Me hubiera gustado más información sobre tallas antes de comprar las botas.'},
+  {name:'Fabián Ricardo Mejía', city:'Ibagué, Tolima', rating:5, text:'El candado de disco antirrobo se siente muy robusto y da tranquilidad al parquear en la calle. Llegó rapidísimo.'},
+  {name:'Natalia Zapata', city:'Cartagena, Bolívar', rating:3, text:'El faro auxiliar funciona bien, aunque el brillo es un poco menor al que mostraban las fotos. Aun así cumple su función.'},
+  {name:'Sebastián David Quintero', city:'Pasto, Nariño', rating:5, text:'Compré la batería de litio en oferta y ha sido una excelente inversión, mi moto enciende sin problema incluso en clima frío.'},
+  {name:'Paula Andrea Londoño', city:'Pereira, Risaralda', rating:4, text:'Muy buena tienda, respondieron todas mis preguntas antes de comprar. El cubre asiento impermeable cumple perfecto su función.'},
+];
+
 const WHATSAPP_NUMBER = "573001234567"; // ← reemplaza por el número real del negocio
 
 /* ================= STATE ================= */
@@ -510,6 +584,7 @@ let cart = {};
 const fmt = n => '$' + n.toLocaleString('es-CO');
 const catOf = id => CATEGORIES.find(c => c.id === id);
 const prodOf = id => PRODUCTS.find(p => p.id === id);
+const initialsOf = name => name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase();
 
 /* ================= RENDER: aisle strip ================= */
 function renderAisleStrip(){
@@ -585,9 +660,15 @@ function renderOffers(){
 }
 
 /* ================= RENDER: category sections ================= */
+const CATEGORY_PREVIEW_COUNT = 2; // productos visibles por categoría antes de "ver más"
+
 function renderCategories(){
   const root = document.getElementById('categoriesRoot');
-  root.innerHTML = CATEGORIES.map(c => `
+  root.innerHTML = CATEGORIES.map(c => {
+    const catProducts = PRODUCTS.filter(p => p.cat === c.id);
+    const preview = catProducts.slice(0, CATEGORY_PREVIEW_COUNT);
+    const rest = catProducts.slice(CATEGORY_PREVIEW_COUNT);
+    return `
     <section class="category-section" id="${c.id}" data-cat="${c.id}">
       <div class="wrap">
         <div class="category-head">
@@ -597,12 +678,74 @@ function renderCategories(){
           </div>
         </div>
         <div class="product-grid" data-grid="${c.id}">
-          ${PRODUCTS.filter(p => p.cat === c.id).map(p => productCard(p)).join('')}
+          ${preview.map(p => productCard(p)).join('')}
         </div>
+        ${rest.length > 0 ? `
+        <div class="product-grid" data-grid-extra="${c.id}" style="display:none; margin-top:18px;">
+          ${rest.map(p => productCard(p)).join('')}
+        </div>
+        <button type="button" class="ver-mas-btn" data-cat-toggle="${c.id}" data-count="${catProducts.length}" onclick="toggleCategoryProducts('${c.id}')">Ver los ${catProducts.length} productos ↓</button>` : ''}
         <p class="no-results" data-noresults="${c.id}">Ningún producto de esta categoría coincide con tu búsqueda.</p>
       </div>
     </section>
-  `).join('');
+  `;
+  }).join('');
+}
+
+function toggleCategoryProducts(catId){
+  const extra = document.querySelector(`[data-grid-extra="${catId}"]`);
+  const btn = document.querySelector(`[data-cat-toggle="${catId}"]`);
+  if(!extra || !btn) return;
+  const isOpen = extra.style.display !== 'none';
+  extra.style.display = isOpen ? 'none' : 'grid';
+  btn.textContent = isOpen ? `Ver los ${btn.dataset.count} productos ↓` : `Ver menos ↑`;
+}
+
+/* ================= RENDER: reviews (Reseñas) ================= */
+function starsSvg(n, total){
+  total = total || 5;
+  let out = '';
+  for(let i=0;i<total;i++){
+    out += i < n ? ICONS.star : `<span class="dim">${ICONS.star}</span>`;
+  }
+  return out;
+}
+function reviewCard(r){
+  return `
+    <article class="review-card">
+      <div class="review-top">
+        <div class="review-avatar">${initialsOf(r.name)}</div>
+        <div class="review-who">
+          <p class="review-name">${r.name}</p>
+          <p class="review-city">${r.city}</p>
+        </div>
+      </div>
+      <div class="review-stars">${starsSvg(r.rating)}</div>
+      <p class="review-text">${r.text}</p>
+      <span class="review-verified">${ICONS.check} Compra verificada</span>
+    </article>`;
+}
+function renderReviews(){
+  const root = document.getElementById('reviewsRoot');
+  const avg = (REVIEWS.reduce((sum,r) => sum + r.rating, 0) / REVIEWS.length).toFixed(1);
+  root.innerHTML = `
+    <section class="reviews-section" id="resenas">
+      <div class="wrap">
+        <div class="reviews-head">
+          <span class="price-tag">${ICONS.star}<span>Reseñas de nuestros clientes</span></span>
+          <div class="reviews-summary">
+            <span class="reviews-score">${avg}</span>
+            <div class="reviews-stars-row">
+              <div class="reviews-stars">${starsSvg(Math.round(avg))}</div>
+              <span class="reviews-count">${REVIEWS.length} reseñas de clientes en Colombia</span>
+            </div>
+          </div>
+        </div>
+        <div class="reviews-grid">
+          ${REVIEWS.map(reviewCard).join('')}
+        </div>
+      </div>
+    </section>`;
 }
 
 /* ================= SEARCH ================= */
@@ -610,13 +753,22 @@ document.getElementById('searchInput').addEventListener('input', e => {
   const q = e.target.value.trim().toLowerCase();
   CATEGORIES.forEach(c => {
     const grid = document.querySelector(`[data-grid="${c.id}"]`);
+    const extra = document.querySelector(`[data-grid-extra="${c.id}"]`);
+    const btn = document.querySelector(`[data-cat-toggle="${c.id}"]`);
     const noRes = document.querySelector(`[data-noresults="${c.id}"]`);
     let visibleCount = 0;
-    grid.querySelectorAll('.product-card').forEach(card => {
-      const match = card.dataset.name.includes(q);
-      card.style.display = match ? '' : 'none';
-      if(match) visibleCount++;
+    [grid, extra].forEach(g => {
+      if(!g) return;
+      g.querySelectorAll('.product-card').forEach(card => {
+        const match = card.dataset.name.includes(q);
+        card.style.display = match ? '' : 'none';
+        if(match) visibleCount++;
+      });
     });
+    if(extra){
+      if(q){ extra.style.display = 'grid'; if(btn) btn.style.display = 'none'; }
+      else { extra.style.display = 'none'; if(btn) btn.style.display = ''; }
+    }
     noRes.style.display = (q && visibleCount === 0) ? 'block' : 'none';
   });
 });
@@ -881,8 +1033,10 @@ document.getElementById('openCartBtn').addEventListener('click', openCart);
 document.getElementById('closeCartBtn').addEventListener('click', closeCart);
 document.getElementById('overlay').addEventListener('click', closeCart);
 
-/* ================= FOOTER WHATSAPP LINK ================= */
+/* ================= WHATSAPP LINKS (hero + footer) ================= */
 document.getElementById('footerWaLink').href =
+  `https://wa.me/${WHATSAPP_NUMBER}?text=Hola,%20quiero%20saber%20más%20sobre%20los%20productos%20de%20TODOYA`;
+document.getElementById('heroWaLink').href =
   `https://wa.me/${WHATSAPP_NUMBER}?text=Hola,%20quiero%20saber%20más%20sobre%20los%20productos%20de%20TODOYA`;
 
 /* ================= ACTIVE AISLE ON SCROLL ================= */
@@ -904,6 +1058,7 @@ renderOffers();
 renderCategories();
 renderCart();
 renderDepartamentos();
+renderReviews();
 </script>
 </body>
 </html>
